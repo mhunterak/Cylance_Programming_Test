@@ -26,7 +26,7 @@ def get_mdobj_or_404(id):
     # if the MdObj doesn't exist,
     except models.MdObj.DoesNotExist:
         # raise a 404 error
-        abort(404)
+        abort(404, "Provided GUID not found")
     # if no error is not raised,
     else:
         # return the MdObj
@@ -110,6 +110,9 @@ class MdObj_resource(Resource):
                 201)
         # if a guid has been provided,
         else:
+            # test it for validity
+            if not models.validate_GUID(id):
+                abort(400, "Provided GUID is not valid")
             try:
                 # a user is not always provided on updates.
                 # if it's not supplied in arguments,

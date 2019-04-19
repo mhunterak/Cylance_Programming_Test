@@ -5,12 +5,35 @@ import uuid
 
 import peewee
 
-DATABASE = peewee.SqliteDatabase('GUID.db')
+from config import DEBUG
+
+if DEBUG:
+    DATABASE = peewee.SqliteDatabase('GUID_test.db')
+else:
+    DATABASE = peewee.SqliteDatabase('GUID.db')  # pragma: no cover
 
 
 def Set_GUID():
     ''' If a GUID is not provided, this function will generate a new one '''
     return uuid.uuid4().hex.upper()
+
+
+def validate_GUID(input):
+    '''
+    Validates GUID input. returns True for valid input
+    '''
+    # must be 32 characters
+    if len(input) != 32:
+        return False
+    # must use uppercase letters
+    elif input != input.upper():
+        return False
+    # must be alphanumeric
+    elif not input.isalnum():
+        return False
+    # if tests pass, return true
+    else:
+        return True
 
 
 def Set_Expiration():

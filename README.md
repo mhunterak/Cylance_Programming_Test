@@ -74,7 +74,7 @@ Output:
 # Read
 Returns the metadata associated to the given GUID.
 
-DONE - Example
+DONE - Example 3
 URL: GET /guid/9094E4C980C74043A4B586B420E69DDF
 Output:
 {
@@ -87,7 +87,7 @@ Output:
 Updates the metadata associated to the given GUID. The GUID itself cannot be
 updated using this command.
 
-DONE - Example
+DONE - Example 4
 URL: PUT /guid/9094E4C980C74043A4B586B420E69DDF
 
 Input:
@@ -104,7 +104,7 @@ Output:
 
 # Delete
 Deletes the GUID and its associated data.
-DONE - Example
+DONE - Example 5
 URL: DELETE /guid/9094E4C980C74043A4B586B420E69DDF
 No output.
 
