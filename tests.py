@@ -82,6 +82,11 @@ class B_MdObjTestResources(unittest.TestCase):
             '/guid/9094E4C980C74043A4B586B420E69DDF?expire=1427822745')
         self.assertEqual(rv.status_code, 200)
 
+    def test_D_MdObjAPIRoutes_Put_invalidUpdate(self):
+        rv = CLIENT.put(
+            '/guid/9094E4C980C74043A4B586B420E69DDF?expire=12/31/1999')
+        self.assertEqual(rv.status_code, 400)
+
     def test_E_MdObjAPIRoutes_Delete(self):
         # example 5
         rv = CLIENT.delete('/guid/9094E4C980C74043A4B586B420E69DDF')

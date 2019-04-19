@@ -93,8 +93,13 @@ class MdObj_resource(Resource):
             expire = models.Set_Expiration()
         # if an expiration timestamp is set explicitly,
         else:
-            # convert the argument to an integer
-            expire = int(self.args['expire'])
+            try:
+                # convert the argument to an integer
+                expire = int(self.args['expire'])
+            except ValueError:
+                abort(
+                    400,
+                    "invalid expiration date, please use a UNIX timetamp")
 
         # if no guid is provided,
         if id is None:
