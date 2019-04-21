@@ -44,35 +44,41 @@ conforms the specified formats. Code must be documented.
 Creates a new GUID and stores it in the database along with the metadata
 provided. If a GUID is not specified, the system should generate a random one.
 
-`
+
 Example 1
 URL: PUT /guid/9094E4C980C74043A4B586B420E69DDF
 Input:
+```
 {
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
+```
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
-`
+```
 `
 Example 2
 URL: PUT /guid
 Input:
+```
 {
 "user": "Cylance, Inc."
 }
+```
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
-`
+```
 
 # Read
 Returns the metadata associated to the given GUID.
@@ -80,12 +86,13 @@ Returns the metadata associated to the given GUID.
 Example 3
 URL: GET /guid/9094E4C980C74043A4B586B420E69DDF
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
-`
+```
 
 ### Update
 Updates the metadata associated to the given GUID. The GUID itself cannot be
@@ -95,17 +102,20 @@ Example 4
 URL: PUT /guid/9094E4C980C74043A4B586B420E69DDF
 
 Input:
+```
 {
 "expire": "1427822745",
 }
+```
 
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427822745",
 "user": "Cylance, Inc."
 }
-`
+```
 
 ### Delete
 Deletes the GUID and its associated data.
