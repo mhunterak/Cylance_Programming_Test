@@ -2,7 +2,7 @@
 -tests do not pass-
 TODO: update to /api/v1/*
 
-example 1 - FAIL
+example 1 - PASS
 example 2 - PASS
 example 3 - PASS
 example 4 - PASS
@@ -62,45 +62,45 @@ class B_MdObjTestResources(unittest.TestCase):
 
     def test_B_MdObjAPIRoutes_Put_invalidGUID(self):
         rv = CLIENT.put(
-            '/guid/9094E4C980C74043A4B586B420E.')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E.')
         self.assertEqual(rv.status_code, 400)
         rv = CLIENT.put(
-            '/guid/9094E4C980C74043A4B586B420E69ddf')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69ddf')
         self.assertEqual(rv.status_code, 400)
         rv = CLIENT.put(
-            '/guid/9094E4C980C74043A4B586B420E&*DDF')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E&*DDF')
         self.assertEqual(rv.status_code, 400)
 
     def test_B_MdObjAPIRoutes_Put_wID(self):
         # example 1
         rv = CLIENT.put(
-            '/guid/9094E4C980C74043A4B586B420E69DDF?user=Cylance, Inc.')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF?user=Cylance, Inc.')
         self.assertEqual(rv.status_code, 201)
 
         # example 3
         rv = CLIENT.get(
-            '/guid/9094E4C980C74043A4B586B420E69DDF')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF')
         self.assertEqual(rv.status_code, 200)
 
     def test_C_MdObjAPIRoutes_Put_WoID(self):
         # example 2
-        rv = CLIENT.put('/guid?user=Cylance, Inc.')
+        rv = CLIENT.put('/api/v1/guid?user=Cylance, Inc.')
         self.assertEqual(rv.status_code, 201)
 
     def test_D_MdObjAPIRoutes_Put_update(self):
         # example 4
         rv = CLIENT.put(
-            '/guid/9094E4C980C74043A4B586B420E69DDF?expire=1427822745')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF?expire=1427822745')
         self.assertEqual(rv.status_code, 200)
 
     def test_D_MdObjAPIRoutes_Put_invalidUpdate(self):
         rv = CLIENT.put(
-            '/guid/9094E4C980C74043A4B586B420E69DDF?expire=12/31/1999')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF?expire=12/31/1999')
         self.assertEqual(rv.status_code, 400)
 
     def test_E_MdObjAPIRoutes_Delete(self):
         # example 5
-        rv = CLIENT.delete('/guid/9094E4C980C74043A4B586B420E69DDF')
+        rv = CLIENT.delete('/api/v1/guid/9094E4C980C74043A4B586B420E69DDF')
         self.assertEqual(rv.status_code, 204)
 
 

@@ -141,6 +141,7 @@ def mdObj_api(guid=None):
             models.validate_GUID(guid)
             try:
                 # UPDATE #
+                mdobj = models.MdObj.get(models.MdObj.guid == guid)
                 # a user is not always provided on updates.
                 # if it's not supplied in arguments,
                 if json_data['user'] is None:
@@ -154,11 +155,13 @@ def mdObj_api(guid=None):
                 # return the updated model
                 json_data = marshal(mdobj, mdobj_fields)
                 cache.set('{}'.format(guid), jsonify(json_data), timeout=60)
-                return (jsonify(json_data), 200)
+                print('# UPDATE #')
+                return (jsonify(marshal(json_data, mdobj_fields)), 200)
             # if an object matching the guid is not found,
             except models.MdObj.DoesNotExist:
                 # CREATE WITH GUID #
                 print('# CREATE WITH GUID #')
+                print(expire)
                 # create a new one
                 json_data = marshal(
                     models.MdObj.create(
