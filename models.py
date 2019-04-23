@@ -3,6 +3,7 @@ from datetime import timedelta as td
 import json
 import uuid
 
+from flask import abort
 import peewee
 
 from config import DEBUG

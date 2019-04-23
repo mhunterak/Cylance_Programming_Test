@@ -1,14 +1,3 @@
-'''
--tests do not pass-
-TODO: update to /api/v1/*
-
-example 1 - PASS
-example 2 - PASS
-example 3 - PASS
-example 4 - PASS
-example 5 - PASS
-example 6 - PASS
-'''
 import unittest
 import base64
 import json
@@ -20,7 +9,6 @@ from werkzeug.exceptions import NotFound
 import pdapt
 import config
 import models
-from resources import guid
 
 CLIENT = pdapt.app.test_client()
 
@@ -29,29 +17,29 @@ CLIENT = pdapt.app.test_client()
 class A_ModelsTestCase(unittest.TestCase):
     def test_A_initialize(self):
         models.initialize()
-        for mdobj in pdapt.models.MdObj.select():
+        for mdobj in models.MdObj.select():
             mdobj.delete_instance()
 
     def test_B_create_mdobj(self):
         # at this point, the database should be empty
-        self.assertEqual(pdapt.models.MdObj.select().count(), 0)
+        self.assertEqual(models.MdObj.select().count(), 0)
         mdobj = models.MdObj.create(user="TestRunner")
-        self.assertEqual(pdapt.models.MdObj.select().count(), 1)
-        with self.assertRaises(NotFound):
-            mdobj = guid.get_mdobj_or_404(1)
+        self.assertEqual(models.MdObj.select().count(), 1)
         mdobj.delete_instance()
+        with self.assertRaises(NotFound):
+            mdobj = pdapt.get_mdobj_or_404(mdobj.guid)
 
     def test_C_get_or_404(self):
         with self.assertRaises(NotFound):
-            guid.get_mdobj_or_404("8BBB25CF671C4252A10ACE550A29C890")
+            pdapt.get_mdobj_or_404("8BBB25CF671C4252A10ACE550A29C890")
         models.MdObj.create(
             guid="8BBB25CF671C4252A10ACE550A29C890", user="Cylance, Inc.`")
-        self.assertEqual(guid.get_mdobj_or_404(
+        self.assertEqual(pdapt.get_mdobj_or_404(
             "8BBB25CF671C4252A10ACE550A29C890").guid,
             '8BBB25CF671C4252A10ACE550A29C890')
 
     def test_ZZ_tearDown(self):
-        for mdobj in pdapt.models.MdObj.select():
+        for mdobj in models.MdObj.select():
             mdobj.delete_instance()
 
 
@@ -61,46 +49,91 @@ class B_MdObjTestResources(unittest.TestCase):
         self.assertEqual(rv.status_code, 200)
 
     def test_B_MdObjAPIRoutes_Put_invalidGUID(self):
-        rv = CLIENT.put(
-            '/api/v1/guid/9094E4C980C74043A4B586B420E.')
+        '''
+        This function tests invalid routes
+        '''
+        rv = CLIENT.post(
+            '/api/v1/guid/9094E4C980C74043A4B586B420E.',
+            data="""{
+                "expire": "1427736345",
+                "user": "Cylance, Inc."
+            }
+            """,
+            content_type='application/json')
         self.assertEqual(rv.status_code, 400)
-        rv = CLIENT.put(
-            '/api/v1/guid/9094E4C980C74043A4B586B420E69ddf')
+        rv = CLIENT.post(
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69ddf',
+            data="""{
+                "expire": "1427736345",
+                "user": "Cylance, Inc."
+            }
+            """,
+            content_type='application/json')
         self.assertEqual(rv.status_code, 400)
-        rv = CLIENT.put(
-            '/api/v1/guid/9094E4C980C74043A4B586B420E&*DDF')
+        rv = CLIENT.post(
+            '/api/v1/guid/9094E4C980C74043A4B586B420E&*DDF',
+            data="""{
+                "expire": "1427736345",
+                "user": "Cylance, Inc."
+            }
+            """,
+            content_type='application/json')
         self.assertEqual(rv.status_code, 400)
 
     def test_B_MdObjAPIRoutes_Put_wID(self):
         # example 1
-        rv = CLIENT.put(
-            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF?user=Cylance, Inc.')
+        rv = CLIENT.post(
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF',
+            data="""{
+                "expire": "1427736345",
+                "user": "Cylance, Inc."
+            }
+            """,
+            content_type='application/json')
         self.assertEqual(rv.status_code, 201)
 
         # example 3
         rv = CLIENT.get(
-            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF')
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF',
+            # data=<< << << <<
+            content_type='application/json')
         self.assertEqual(rv.status_code, 200)
 
     def test_C_MdObjAPIRoutes_Put_WoID(self):
         # example 2
-        rv = CLIENT.put('/api/v1/guid?user=Cylance, Inc.')
+        rv = CLIENT.post(
+            '/api/v1/guid',
+            data="""{"user": "Cylance, Inc."}""",
+            content_type='application/json')
         self.assertEqual(rv.status_code, 201)
 
     def test_D_MdObjAPIRoutes_Put_update(self):
         # example 4
-        rv = CLIENT.put(
-            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF?expire=1427822745')
+        rv = CLIENT.post(
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF',
+            # data=<< << << <<
+            data="""{
+                "expire": "1427736125",
+                "user": "Cylance, Inc."
+            }
+            """,
+            content_type='application/json')
         self.assertEqual(rv.status_code, 200)
 
     def test_D_MdObjAPIRoutes_Put_invalidUpdate(self):
-        rv = CLIENT.put(
-            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF?expire=12/31/1999')
+        rv = CLIENT.post(
+            '/api/v1/guid/9094E4C980C74043A4B586B420E69DDF',
+            data="""{
+                "expire": "2/31/1999",
+            }
+            """,
+            content_type='application/json')
         self.assertEqual(rv.status_code, 400)
 
     def test_E_MdObjAPIRoutes_Delete(self):
         # example 5
-        rv = CLIENT.delete('/api/v1/guid/9094E4C980C74043A4B586B420E69DDF')
+        rv = CLIENT.delete('/api/v1/guid/9094E4C980C74043A4B586B420E69DDF',
+                           content_type='application/json')
         self.assertEqual(rv.status_code, 204)
 
 
