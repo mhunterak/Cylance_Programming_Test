@@ -23,7 +23,7 @@ Or:
 
 
 
-# Description
+## Description
 Design and implement a RESTful web API that can be used to maintain a database of GUIDs (Globally Unique Identifier) and associated
 metadata. The API must expose commands to perform CRUD operations (Create, Read, Update, Delete). 
 DONE: The application should use a cache layer to quickly serve the most recently used GUIDs. 
@@ -35,80 +35,97 @@ Input and output data should be valid JSON format.
 Validations should be put in place to make sure input data
 conforms the specified formats. Code must be documented.
 
-# Bonus points if the solution is fully asynchronous.
+### Bonus points if the solution is fully asynchronous.
 
 
-### Commands specification
+## Commands specification
 
-# Create
+### Create
 Creates a new GUID and stores it in the database along with the metadata
 provided. If a GUID is not specified, the system should generate a random one.
 
-DONE - Example 1
+
+Example 1
 URL: PUT /guid/9094E4C980C74043A4B586B420E69DDF
 Input:
+```
 {
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
+```
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
-
-DONE - Example 2
+```
+`
+Example 2
 URL: PUT /guid
 Input:
+```
 {
 "user": "Cylance, Inc."
 }
+```
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
+```
 
 # Read
 Returns the metadata associated to the given GUID.
 
-DONE - Example 3
+Example 3
 URL: GET /guid/9094E4C980C74043A4B586B420E69DDF
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427736345",
 "user": "Cylance, Inc."
 }
+```
 
-# Update
+### Update
 Updates the metadata associated to the given GUID. The GUID itself cannot be
 updated using this command.
-
-DONE - Example 4
+`
+Example 4
 URL: PUT /guid/9094E4C980C74043A4B586B420E69DDF
 
 Input:
+```
 {
 "expire": "1427822745",
 }
+```
 
 Output:
+```
 {
 "guid": "9094E4C980C74043A4B586B420E69DDF",
 "expire": "1427822745",
 "user": "Cylance, Inc."
 }
+```
 
-# Delete
+### Delete
 Deletes the GUID and its associated data.
-DONE - Example 5
+`
+Example 5
 URL: DELETE /guid/9094E4C980C74043A4B586B420E69DDF
 No output.
+`
 
-# Error code returns
+### Error code returns
 The following response codes should be returned by the service:
 
 200's on accepted/successful requests
