@@ -24,12 +24,15 @@ def validate_GUID(input):
     '''
     # must be 32 characters
     if len(input) != 32:
+        abort(400, "Failed len")
         return False
     # must use uppercase letters
     elif input != input.upper():
+        abort(400, "Failed upper")
         return False
     # must be alphanumeric
     elif not input.isalnum():
+        abort(400, "Failed alnum")
         return False
     # if tests pass, return true
     else:
