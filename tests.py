@@ -4,7 +4,7 @@ TODO: update to /api/v1/*
 
 example 1 - FAIL
 example 2 - PASS
-example 3 - FAIL
+example 3 - PASS
 example 4 - PASS
 example 5 - PASS
 example 6 - PASS

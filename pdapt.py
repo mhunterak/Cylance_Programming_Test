@@ -68,11 +68,11 @@ def mdObj_api(guid=None):
         if rv is None:
             rv = get_mdobj_or_404(guid)
             cache.set('{}'.format(guid), rv, timeout=60)
-        return (jsonify(rv), 200)
+        return (jsonify(marshal(rv, mdobj_fields)), 200)
 
     elif request.method == "POST":
         '''
-        The PUT method uses the @marshal_with decorator to create or update
+        The PUT method uses the marshal function to create or update
         an MdObj instance. The logic on when it does what is the most
         complicated for sure, but at a high level it goes something like this:
 
@@ -82,6 +82,7 @@ def mdObj_api(guid=None):
         if PUT was called without an GUID argument:
             create a new entry from the arguments
         '''
+        print('POST')
         # build a request parser
         reqparse = rqpar.RequestParser()
         # pull the user arguments
@@ -157,6 +158,7 @@ def mdObj_api(guid=None):
             # if an object matching the guid is not found,
             except models.MdObj.DoesNotExist:
                 # CREATE WITH GUID #
+                print('# CREATE WITH GUID #')
                 # create a new one
                 json_data = marshal(
                     models.MdObj.create(
